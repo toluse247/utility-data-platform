@@ -23,7 +23,7 @@ CREATE TABLE transformers (
     feeder_id INT NOT NULL,
 
     FOREIGN KEY (feeder_id) REFERENCES feeders(feeder_id),
-    FOREIGN KEY (sales_rep_id) REFERENCES sales_rep(sales_rep_id)
+    FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(sales_rep_id)
 );
 
 
