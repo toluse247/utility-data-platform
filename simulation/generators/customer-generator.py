@@ -14,33 +14,47 @@ def random_timestamp(start, end, n):
     return pd.to_datetime(random_ts, unit='s')
 
 # Define the number of customers to generate
-num_customers = 100000
+num_customers = 1000000
 num_transformers = 4000
 start = datetime(2024, 1, 1)
 end = datetime(2025, 12, 31)
 
-# Generate customer data
-customer_data = {
-    "customer_id": np.arange(num_customers),
-    "meter_number": [f"MTR{i}" for i in range(num_customers)],
-    "customer_name": [fake.name() for _ in range(num_customers)],
-    "address": [fake.address() for _ in range(num_customers)],
-    "customer_phone": [fake.phone_number() for _ in range(num_customers)],
-    "customer_type": np.random.choice(["R","D"], num_customers),
-    "transformer_id": np.random.randint(1, num_transformers+1, num_customers),
-    "account_status": np.random.choice(["ACTIVE", "INACTIVE"], num_customers),
-    "latitude": round(np.random.uniform(5, 7, num_customers), 6),
-    "longitude": round(np.random.uniform(5, 7, num_customers), 6),
-    "email": [fake.email() for _ in range(num_customers)],
-    "created_at": random_timestamp(start, end, num_customers)
-}
+# Pre-generate pools (speed optimization)
+name_pool = [fake.name() for _ in range(10000)]
+address_pool = [fake.address().replace("\n", ", ") for _ in range(10000)]
+email_pool = [fake.email() for _ in range(10000)]
+phone_pool = [fake.phone_number() for _ in range(10000)]
 
-# Create DataFrame
-df = pd.DataFrame(customer_data)
+# Generate customer data in chunks
+size = 100000
+for i in range(num_customers // size):
+    start_idx = i * size + 1
+    end_idx = (i + 1) * size + 1
 
-# Export file
-df.to_csv('customers_1.csv', index=False)
-print("1 million customer records generated successfully!")
+    customer_data = {
+        "customer_id": np.arange(start_idx, end_idx),
+        "meter_number": [f"MTR{i:06d}" for i in range(start_idx, end_idx)],
+        "customer_name": np.random.choice(name_pool, size),
+        "address": np.random.choice(address_pool, size),
+        "customer_phone": np.random.choice(phone_pool, size),
+        "customer_type": np.random.choice(["Residential", "Commercial", "Industrial"], size),
+        "billing_type": np.random.choice(["R","D"], size),
+        "transformer_id": np.random.randint(1, num_transformers+1, size),
+        "account_status": np.random.choice(["ACTIVE", "INACTIVE"], size),
+        "latitude": np.around(np.random.uniform(5, 7, size), 6),
+        "longitude": np.around(np.random.uniform(5, 7, size), 6),
+        "email": np.random.choice(email_pool, size),
+        "created_at": random_timestamp(start, end, size),
+    }
+
+    # Create DataFrame
+    df = pd.DataFrame(customer_data)
+
+    # Export and append to file
+    df.to_csv('customers.csv', index=False, mode='a', header=(i==0))
+    print(f"{start_idx} to {end_idx-1} customers records generated successfully!")
+
+print(f"{num_customers} customers records generated successfully!")
 
 
 

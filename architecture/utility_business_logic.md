@@ -123,11 +123,10 @@ customers
 
 Customer types may include:
 
-| Code | Description |
-| ---- | ----------- |
-| R    | Residential |
-| C    | Commercial  |
-| I    | Industrial  |
+| Code | Description        |
+| ---- | -----------------  |
+| R    | Read (Metered)     |
+| D    | Direct (Unmetered) |
 
 ---
 
@@ -139,6 +138,7 @@ Table:
 
 ```
 band_tariff
+
 ```
 
 Each band defines:
@@ -151,9 +151,9 @@ Example:
 
 | Band | Tariff Rate | VAT      |
 | ---- | ----------- | -------- |
-| A    | High        | Standard |
-| B    | Medium      | Standard |
-| C    | Low         | Standard |
+| A    | 200.00        | Standard |
+| B    | 150.00        | Standard |
+| C    | 100.00        | Standard |
 
 Feeder tariff band determines **customer billing rates**.
 
@@ -558,6 +558,21 @@ The platform enables tracking of key utility performance metrics.
 * Collection efficiency
 * Average revenue per customer
 * Debt recovery rate
+
+---
+
+### Organisational Data Hierarchy
+
+| Table                     | Records                       |
+| ------------------------- | ----------------------------- |
+| regions                   | 4                             |
+| districts                 | 12                            |
+| service_units             | 30                            |
+| band_tariff               | 5                             |
+| sales_reps                | 200                           |
+| feeders                   | 120                           |
+| transformers              | 4000                          |
+| customers                 | 1,000,000                     |
 
 ---
 
