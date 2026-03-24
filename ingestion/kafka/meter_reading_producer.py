@@ -15,7 +15,6 @@ producer = KafkaProducer(
 def send_to_kafka(data):
     try:
         producer.send(TOPIC_NAME, value=data)
-        print("message has reached kafka producer")
         producer.flush()
     except Exception as e:
         print(f"Error sending to Kafka: {e}")

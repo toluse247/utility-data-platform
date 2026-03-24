@@ -21,7 +21,7 @@ end = datetime(2025, 12, 31)
 
 # Pre-generate pools (speed optimization)
 name_pool = [fake.name() for _ in range(10000)]
-address_pool = [fake.address().replace("\n", ", ") for _ in range(10000)]
+address_pool = [fake.address().replace("\n", " ") for _ in range(10000)]
 email_pool = [fake.email() for _ in range(10000)]
 phone_pool = [fake.phone_number() for _ in range(10000)]
 
