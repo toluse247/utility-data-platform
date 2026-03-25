@@ -13,7 +13,7 @@ num_customers = 900000
 def generate_payment_event(customer_id, timestamp, payment_id):
     return {"payment_id": payment_id,
         "customer_id": customer_id,
-        "payment_amount": round(np.random.uniform(1000, 10000), 2),
+        "payment_amount": round(np.random.uniform(20000, 200000), 2),
         "payment_channel": np.random.choice(["debit_card", "bank_transfer", "mobile_payment"]),
         "payment_timestamp": timestamp
     }
@@ -25,7 +25,7 @@ def simulate_payments():
     current = start
     payment_id = 1
     while current <= end:
-        for i in range(30000):
+        for i in range(1500):
             customer_id = np.random.randint(1, num_customers+1)
             timestamp = current + timedelta(hours=np.random.randint(0, 23))
             data = generate_payment_event(customer_id, timestamp.isoformat(), payment_id)

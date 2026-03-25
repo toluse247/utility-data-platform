@@ -70,17 +70,6 @@ CREATE TABLE customers (
     FOREIGN KEY (transformer_id) REFERENCES transformers(transformer_id)
 );
 
-CREATE TABLE feeder_energy_consumption (
-    feeder_cons_id INT PRIMARY KEY,
-    feeder_id INT NOT NULL,
-    feeder_name VARCHAR(50),
-    consumption_month DATE,
-    consumption_kwh NUMERIC(10, 2),
-
-    FOREIGN KEY (feeder_id) REFERENCES feeders(feeder_id)
-);
-
-
 
 CREATE TABLE billing_records (
     bill_id SERIAL PRIMARY KEY,
@@ -103,33 +92,11 @@ CREATE TABLE billing_records (
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
 
-
-CREATE TABLE meter_readings (
-    meter_reading_id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    meter_number VARCHAR(50),
-    read_date DATE,
-    meter_reading FLOAT,
-
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-);
-
 CREATE TABLE customer_monthly_payments (
     customer_id INT,
     year INT,
     month INT,
     total_payment NUMERIC(10, 2),
-
-    PRIMARY KEY (customer_id, year, month),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-    
-);
-
-CREATE TABLE monthly_meter_readings (
-    customer_id INT,
-    year INT,
-    month INT,
-    meter_reading NUMERIC(10, 2),
 
     PRIMARY KEY (customer_id, year, month),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
@@ -149,80 +116,5 @@ CREATE TABLE field_visits (
     FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(sales_rep_id)
 );
 
-CREATE TABLE transformer_update_records (
-    transformer_update_id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    customer_name VARCHAR(50),
-    new_transformer_id INT NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-    FOREIGN KEY (new_transformer_id) REFERENCES transformers(transformer_id)
-);
-
-CREATE TABLE feeder_update_records (
-    feeder_update_id SERIAL PRIMARY KEY,
-    transformer_id INT NOT NULL,
-    transformer_name VARCHAR(50),
-    new_feeder_id INT NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (transformer_id) REFERENCES transformers(transformer_id),
-    FOREIGN KEY (new_feeder_id) REFERENCES feeders(feeder_id)
-);
-
-
-CREATE TABLE sales_rep_update_records (
-    sales_rep_update_id SERIAL PRIMARY KEY,
-    transformer_id INT NOT NULL,
-    transformer_name VARCHAR(50),
-    new_sales_rep_id INT NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (transformer_id) REFERENCES transformers(transformer_id),
-    FOREIGN KEY (new_sales_rep_id) REFERENCES sales_reps(sales_rep_id)
-);
-
-
-CREATE TABLE band_update_records (
-    band_update_id SERIAL PRIMARY KEY,
-    feeder_id INT NOT NULL,
-    feeder_name VARCHAR(50),
-    new_band_id INT NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (feeder_id) REFERENCES feeders(feeder_id),
-    FOREIGN KEY (new_band_id) REFERENCES band_tariff(band_id)
-);
-
-
-CREATE TABLE tariff_rate_update_records (
-    tariff_rate_update_id SERIAL PRIMARY KEY,
-    band_id INT NOT NULL,
-    band_name VARCHAR(50),
-    new_tariff_rate NUMERIC(10, 2) NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (band_id) REFERENCES band_tariff(band_id)
-);
-
-CREATE TABLE vat_rate_update_records (
-    vat_rate_update_id SERIAL PRIMARY KEY,
-    band_id INT NOT NULL,
-    band_name VARCHAR(50),
-    new_vat_rate NUMERIC(10, 2) NOT NULL,
-    initiator_name VARCHAR(50),
-    request_date DATE,
-
-    FOREIGN KEY (band_id) REFERENCES band_tariff(band_id)
-);
-
-
 CREATE INDEX idx_customer_id ON billing_records(customer_id);
-CREATE INDEX idx_meter_customer ON meter_readings(customer_id);
 CREATE INDEX idx_payment_customer ON payments(customer_id);

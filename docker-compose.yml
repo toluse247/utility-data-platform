@@ -90,9 +90,11 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow_db
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
     volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
+      - ./infrastructure/airflow/dags:/opt/airflow/dags
+      - ./infrastructure/airflow/logs:/opt/airflow/logs
+      - ./infrastructure/airflow/scripts:/opt/airflow/scripts
       - airflow_data:/opt/airflow
     ports:
       - "8080:8080"
@@ -105,27 +107,36 @@ services:
   # SPARK (MASTER)
   # ----------------------
   spark-master:
-    image: bitnami/spark:3.5.0
+    image: apache/spark:3.4.3
     container_name: spark-master
     environment:
       - SPARK_MODE=master
+      - SPARK_IVY=/tmp/.ivy2
     ports:
       - "7077:7077"
-      - "8081:8080"
+      - "8080:8080"
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.master.Master
     volumes:
+      - ./streaming_processing/spark_jobs:/opt/spark/jobs
       - spark_data:/bitnami/spark
 
   # ----------------------
-  # SPARK WORKER
+  # SPARK (WORKER)
   # ----------------------
+
   spark-worker:
-    image: bitnami/spark:3.5.0
+    image: apache/spark:3.4.3
     container_name: spark-worker
     depends_on:
       - spark-master
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     volumes:
       - spark_worker_data:/bitnami/spark
 

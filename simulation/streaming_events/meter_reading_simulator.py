@@ -1,7 +1,7 @@
 import numpy as np
 from datetime import datetime, timedelta
 import time
-from ingestion.kafka.meter_reading_producer import sendtokafka
+from ingestion.kafka.meter_reading_producer import send_to_kafka
 
 # Config
 start = datetime(2024, 1, 1)
@@ -9,7 +9,7 @@ end = datetime(2025, 12, 31)
 
 num_customers = 100
 base_reading = 1000
-variation = 5  # realistic hourly increment
+variation = 3  # realistic hourly increment
 
 # Initialize customer base meter states
 customer_readings = {
@@ -37,7 +37,7 @@ def simulate_meter_readings():
 
             data = generate_meter_reading(customer_id, current, meter_reading_id)
 
-            sendtokafka(data)
+            send_to_kafka(data)
 
             meter_reading_id += 1
 

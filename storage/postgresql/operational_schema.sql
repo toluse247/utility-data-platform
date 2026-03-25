@@ -125,6 +125,17 @@ CREATE TABLE customer_monthly_payments (
     
 );
 
+CREATE TABLE monthly_meter_readings (
+    customer_id INT,
+    year INT,
+    month INT,
+    meter_reading NUMERIC(10, 2),
+
+    PRIMARY KEY (customer_id, year, month),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    
+);
+
 
 CREATE TABLE field_visits (
     visit_id SERIAL PRIMARY KEY,
@@ -138,6 +149,17 @@ CREATE TABLE field_visits (
     FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(sales_rep_id)
 );
 
+CREATE TABLE transformer_update_records (
+    transformer_update_id SERIAL PRIMARY KEY,
+    customer_id INT NOT NULL,
+    customer_name VARCHAR(50),
+    new_transformer_id INT NOT NULL,
+    initiator_name VARCHAR(50),
+    request_date DATE,
+
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (new_transformer_id) REFERENCES transformers(transformer_id)
+);
 
 CREATE TABLE feeder_update_records (
     feeder_update_id SERIAL PRIMARY KEY,
