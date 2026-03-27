@@ -1,0 +1,10 @@
+tariff_rate_update_id,band_id,band_name,new_tariff_rate,initiator_name,request_date
+1,1,A,200.85,Tommy Lopez,3/26/2026
+2,2,B,150.65,Tommy Lopez,3/26/2026
+3,3,C,100.45,Tommy Lopez,3/26/2026
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,

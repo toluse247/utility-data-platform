@@ -85,7 +85,8 @@ CREATE TABLE feeder_energy_consumption (
 CREATE TABLE billing_records (
     bill_id SERIAL PRIMARY KEY,
     customer_id INT,
-    billing_month DATE,
+    billing_month DATE,    
+    billing_type VARCHAR(1),
     due_date DATE,
     previous_reading FLOAT,
     present_reading FLOAT,
@@ -99,17 +100,6 @@ CREATE TABLE billing_records (
     previous_adjustments NUMERIC(10, 2),
     net_arrears NUMERIC(10, 2),
     outstanding_amount NUMERIC(10, 2),
-
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-);
-
-
-CREATE TABLE meter_readings (
-    meter_reading_id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    meter_number VARCHAR(50),
-    read_date DATE,
-    meter_reading FLOAT,
 
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );

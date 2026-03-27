@@ -50,9 +50,18 @@ print(f"Consuming from {TOPIC_NAME} and writing to S3...")
 # -------------------------
 def upload_to_s3(records):
     if not records:
+        print("No records to upload")
         return
 
     df = pd.DataFrame(records)
+
+    if df.empty:
+        print("DataFrame is empty")
+        return
+
+    if "read_timestamp" not in df.columns:
+        print("Missing read_timestamp column")
+        return
 
     # Convert timestamp
     df["read_timestamp"] = pd.to_datetime(df["read_timestamp"])
@@ -64,7 +73,7 @@ def upload_to_s3(records):
     df["hour"] = df["read_timestamp"].dt.hour
 
     # Build S3 path (data lake partitioning)
-    now = datetime.utcnow()
+    now = datetime.now()
     file_name = f"meter_readings_{uuid.uuid4().hex}.csv"
 
     s3_key = (
