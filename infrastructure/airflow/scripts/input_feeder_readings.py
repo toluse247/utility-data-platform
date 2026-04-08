@@ -1,16 +1,10 @@
 import pandas as pd
-import requests
-from io import StringIO
 import psycopg2
 from psycopg2.extras import execute_values
 
-# Download CSV
-url = "FEEDER_READING_FILE_DIRECT_DOWNLOAD_LINK"
-response = requests.get(url)
-data = StringIO(response.text)
-
-# Read into DataFrame
-df = pd.read_csv(data)
+# Download CSV to DataFrame
+url = "https://drive.google.com/uc?export=download&id=1ubxuKJkEZUBqzTKL8xwNu-0A4iaol2qH"
+df = pd.read_csv(url)
 
 # Convert types
 df["feeder_cons_id"] = df["feeder_cons_id"].astype(int)

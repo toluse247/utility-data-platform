@@ -1,15 +1,10 @@
 import pandas as pd
-import requests
-from io import StringIO
 import psycopg2
 from psycopg2.extras import execute_values
 
-url = "MANUAL_READING_FILE_DIRECT_DOWNLOAD_LINK"
-
-response = requests.get(url)
-data = StringIO(response.text)
-
-df = pd.read_csv(data)
+# Download CSV to DataFrame
+url = "https://drive.google.com/uc?export=download&id=11OZdQYtC-Zu5mAcT4esSyc7boP89EClK"
+df = pd.read_csv(url)
 
 # Ensure proper data types
 df["customer_id"] = df["customer_id"].astype(int)

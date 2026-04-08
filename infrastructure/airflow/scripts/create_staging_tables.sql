@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS stg2_billing_records;
 CREATE TABLE stg2_billing_records (
     bill_id SERIAL PRIMARY KEY,
     customer_id INT,
-    billing_month DATE,    
+    billing_month DATE,
     billing_type VARCHAR(1),
     due_date DATE,
     previous_reading FLOAT,

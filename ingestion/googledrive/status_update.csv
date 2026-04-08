@@ -1,0 +1,11 @@
+customer_id,account_status,new_status,initiator_name,request_date
+10,INACTIVE,INACTIVE,Travis Lewis,4/4/2026
+11,ACTIVE,INACTIVE,Travis Lewis,4/4/2026
+12,ACTIVE,ACTIVE,Travis Lewis,4/4/2026
+13,INACTIVE,ACTIVE,Travis Lewis,4/4/2026
+14,ACTIVE,ACTIVE,Travis Lewis,4/4/2026
+15,INACTIVE,INACTIVE,Travis Lewis,4/4/2026
+16,INACTIVE,ACTIVE,Travis Lewis,4/4/2026
+17,ACTIVE,ACTIVE,Travis Lewis,4/4/2026
+18,ACTIVE,INACTIVE,Travis Lewis,4/4/2026
+19,ACTIVE,ACTIVE,Travis Lewis,4/4/2026

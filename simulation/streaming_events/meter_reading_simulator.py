@@ -44,9 +44,9 @@ def simulate_meter_readings():
         print(f"Sent batch for {current}")
 
         # Simulate streaming delay
-        time.sleep(0.5)  # adjust for speed
+        time.sleep(0.1)  # adjust for speed
 
-        current += timedelta(hours=1)
+        current += timedelta(days=1)
 
 
 if __name__ == "__main__":

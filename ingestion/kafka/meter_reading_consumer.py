@@ -16,17 +16,18 @@ KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
 TOPIC_NAME = "meter_readings"
 
 S3_BUCKET = os.getenv("S3_BUCKET", "utility-data-bucket")
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
+AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin1234")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
-BATCH_SIZE = 500  # number of records per upload
+BATCH_SIZE = 100  # number of records per upload
 
 # -------------------------
 # S3 Client
 # -------------------------
 s3 = boto3.client(
     "s3",
+    endpoint_url='http://minio:9000',  # MinIO API
     aws_access_key_id=AWS_ACCESS_KEY,
     aws_secret_access_key=AWS_SECRET_KEY,
     region_name=AWS_REGION
@@ -86,7 +87,7 @@ def upload_to_s3(records):
     )
 
     # Save locally then upload
-    local_file = f"/tmp/{file_name}"
+    local_file = f"/Users/tolu_/Documents/utility-data-platform/tmp/{file_name}"
     df.to_csv(local_file, index=False)
 
     s3.upload_file(local_file, S3_BUCKET, s3_key)

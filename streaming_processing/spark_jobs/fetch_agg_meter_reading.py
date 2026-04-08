@@ -12,6 +12,8 @@ from pyspark.sql.types import StructType, StructField, IntegerType, DoubleType, 
 # Configuration
 # ----------------------------
 S3_BUCKET = os.getenv("S3_BUCKET", "utility-data-bucket")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin1234")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
 POSTGRES_HOST = "postgres"
@@ -25,11 +27,27 @@ POSTGRES_TABLE = "monthly_meter_readings"
 # Initialize SparkSession
 # -----------------------------
 
-spark.conf.set("fs.s3a.access.key", "minioadmin")
-spark.conf.set("fs.s3a.secret.key", "minioadmin1234")
-spark.conf.set("fs.s3a.endpoint", "http://98.97.79.69:9000")
-spark.conf.set("fs.s3a.path.style.access", "true")
-spark.conf.set("fs.s3a.connection.ssl.enabled", "false")
+spark = SparkSession.builder \
+    .appName("FetchLatestReadingPerMonth") \
+    .config("spark.hadoop.fs.s3a.access.key", AWS_ACCESS_KEY_ID) \
+    .config("spark.hadoop.fs.s3a.secret.key", AWS_SECRET_ACCESS_KEY) \
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000") \
+    .config("spark.jars.packages",
+            "org.apache.hadoop:hadoop-aws:3.3.4,"
+            "com.amazonaws:aws-java-sdk-bundle:1.12.262,"
+            "org.postgresql:postgresql:42.7.3") \
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
+    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
+    .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
+    .getOrCreate()
+
+hadoop_conf = spark._jsc.hadoopConfiguration()
+hadoop_conf.set("fs.s3a.endpoint", "http://minio:9000")
+hadoop_conf.set("fs.s3a.access.key", "minioadmin")
+hadoop_conf.set("fs.s3a.secret.key", "minioadmin")
+hadoop_conf.set("fs.s3a.path.style.access", "true")
+hadoop_conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # ----------------------------
 # Create schema for reading CSV
